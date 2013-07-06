@@ -1,3 +1,5 @@
+# http://acm.timus.ru/problem.aspx?space=1&num=1022
+
 require_relative 'spec_helper'
 
 describe_problem '1022' do
