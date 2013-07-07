@@ -11,9 +11,10 @@ def describe_problem(problem_id, &block)
   end
 end
 
-def _example(input, expected_output)
+def _example(input, expected_output, mode=nil)
   specify do
     output = get_output "#{LIB_PATH}/#{problem_id}.rb", input
+    puts output if mode == :debug
     output.strip.should == expected_output
   end
 end
