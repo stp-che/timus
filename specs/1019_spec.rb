@@ -21,4 +21,8 @@ describe_problem '1019' do
 
            '0 1'
 
+  n = 4999
+  actions = (1..n).map{|i| [10*i, (10*i+1), 'w']*' ' }
+  _example [n+1, '0 999999999 b', *actions]*"\n", '10 11'
+
 end
