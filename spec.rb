@@ -20,7 +20,9 @@ describe problem.id do
 
   problem.examples.each do |input, expected_output|
     specify do
-      output = solution.execute(input).output
+      r = solution.execute(input)
+      raise r.error if r.error && !r.error.empty?
+      output = r.output
       puts output if $debug
       output.strip.should == expected_output
     end
