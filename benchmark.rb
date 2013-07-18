@@ -1,8 +1,11 @@
 require 'optparse'
 
+$executing_times = 50
+
 OptionParser.new do |o|
   o.on('-p PROBLEM_ID') { |b| $problem_id = b }
   o.on('-e EXAMPLE_NUM') { |b| $example = b.to_i }
+  o.on('-n EXECUTING_TIMES'){|b| $executing_times = b.to_i }
   o.on('-d', 'debug mode'){ $debug = true }
   o.on('-h') { puts o; exit }
   o.parse!
@@ -13,13 +16,13 @@ require_relative 'base'
 problem = Problem._load $problem_id
 solution = Solution.new $problem_id
 
-N = 100
-
-times = problem.examples.map do |input, _|
+problem.examples.each_with_index do |e, i|
+  msg = " example #{i+1}: "
+  print msg
   sum = 0
-  N.times{ sum += solution.execute(input).time }
-  sum/N
+  $executing_times.times{|i|
+    sum += solution.execute(e[0]).time
+    print "\r#{msg}%d%" % (100*i/$executing_times)
+  }
+  puts "\r#{msg}%0.4f" % (sum/$executing_times)
 end
-
-format = 'example %d: %0.4f'
-times.each_with_index{|t, i| puts format % [i+1,t] }

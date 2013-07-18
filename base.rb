@@ -5,55 +5,42 @@ LIB_PATH = File.expand_path File.join(File.dirname(__FILE__), 'lib')
 EXAMPLES_PATH = File.expand_path File.join(File.dirname(__FILE__), 'examples')
 
 class Executing
+  attr_reader :output, :error, :time
+
   def initialize(command, input)
     @command = command
     @input = input
-    @performed = false
-  end
-
-  def output
-    @output ||= begin
-      perform
-      out[0].read
-    end
-  end
-
-  def error
-    @error ||= begin
-      perform
-      err[0].read
-    end
-  end
-
-  def time
-    perform unless @time
-    @time
+    perform
   end
 
   private
 
   def perform
-    return if @performed
-    File.open(input_file,'w'){|f| f << @input}
+    File.open(file_in,'w'){|f| f << @input}
     t = Time.now.to_f
-    Process.wait spawn(@command, in: [input_file], out: out[1], err: err[1] )
+    Process.wait spawn(@command, in: file_in, out: file_out, err: file_err )
     @time = Time.now.to_f - t
-    out[1].close
-    err[1].close
-    FileUtils.rm input_file
-    @performed = true
+    FileUtils.rm file_in
+    if File.file?(file_out)
+      @output = File.read(file_out)
+      FileUtils.rm file_out
+    end
+    if File.file?(file_err)
+      @error = File.read(file_err)
+      FileUtils.rm file_err
+    end
   end
 
-  def out
-    @out ||= IO.pipe
+  def file_out
+    @file_out ||= UUID.generate
   end
 
-  def err
-    @err ||= IO.pipe
+  def file_err
+    @file_err ||= UUID.generate
   end
 
-  def input_file
-    @input_file ||= UUID.generate
+  def file_in
+    @file_in ||= UUID.generate
   end
 
 end
@@ -100,9 +87,3 @@ class Problem
     @examples << [input, output]
   end
 end
-
-# s = Solution.new '1019'
-# pr = Problem._load '1019'
-
-# r = s.execute(pr.examples[4][0])
-# puts r.output
