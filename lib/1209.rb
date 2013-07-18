@@ -1,7 +1,10 @@
+ONE = '1'
+ZERO = '0'
+
 def digit(position)
   d = (position-1)*2
   n = Math.sqrt(d).to_i
-  d == n*(n+1) ? 1 : 0
+  d == n*(n+1) ? ONE : ZERO
 end
 
 n = gets.to_i
