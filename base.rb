@@ -1,3 +1,6 @@
+require 'fileutils'
+require 'uuid'
+
 LIB_PATH = File.expand_path File.join(File.dirname(__FILE__), 'lib')
 EXAMPLES_PATH = File.expand_path File.join(File.dirname(__FILE__), 'examples')
 
@@ -31,14 +34,13 @@ class Executing
 
   def perform
     return if @performed
-    r_in, w_in = IO.pipe
-    w_in.write @input
-    w_in.close
+    File.open(input_file,'w'){|f| f << @input}
     t = Time.now.to_f
-    Process.wait spawn(@command, in: r_in, out: out[1], err: err[1] )
+    Process.wait spawn(@command, in: [input_file], out: out[1], err: err[1] )
     @time = Time.now.to_f - t
     out[1].close
     err[1].close
+    FileUtils.rm input_file
     @performed = true
   end
 
@@ -48,6 +50,10 @@ class Executing
 
   def err
     @err ||= IO.pipe
+  end
+
+  def input_file
+    @input_file ||= UUID.generate
   end
 
 end
@@ -94,3 +100,9 @@ class Problem
     @examples << [input, output]
   end
 end
+
+# s = Solution.new '1019'
+# pr = Problem._load '1019'
+
+# r = s.execute(pr.examples[4][0])
+# puts r.output
