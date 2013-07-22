@@ -77,13 +77,14 @@ class Problem
   @problems = {}
 
   attr_reader :id, :examples
+  attr_accessor :exact_output
 
   def initialize(id)
     @id = id
     @examples = []
   end
 
-  def example(input, output)
-    @examples << [input, output]
+  def example(*ex)
+    @examples << ex
   end
 end

@@ -1,0 +1,1 @@
+$stdout << $stdin.read.gsub(/[a-z]+/i){|s| s.reverse}

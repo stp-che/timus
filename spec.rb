@@ -18,13 +18,18 @@ solution = Solution.new $problem_id
 
 describe problem.id do
 
-  problem.examples.each do |input, expected_output|
+  problem.examples.each do |input, expected_output, exactly|
     specify do
       r = solution.execute(input)
       raise r.error if r.error && !r.error.empty?
       output = r.output
       puts output if $debug
-      output.strip.should == expected_output
+      output = output.strip unless exactly
+      if expected_output.kind_of?(Proc)
+        instance_exec output, &expected_output
+      else
+        output.should == expected_output
+      end
     end
   end
 
