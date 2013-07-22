@@ -9,6 +9,5 @@ Problem.describe '1297' do |pr|
   pr.example 'hgrcccaaacccbbbcccaaxyz', 'aacccbbbcccaa'
   pr.example 'axyzyxiopabcbaqqq', 'xyzyx'
   pr.example 'Q', 'Q'
-  pr.example 'aabbbaabbb', 'aabbbaa'
-  pr.example 'xaay', 'aa'
+  pr.example 'aabbbaabbb', 'bbbaabbb'
 end

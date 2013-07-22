@@ -1,23 +1,20 @@
 str = gets
-max_palindrom_start = max_palindrom_end = 0
-current_palindrom_start = 0
-current_palindrom_has_different_letters = false
 
-(1..str.size-1).each do |i|
-  x = str[i]
-  if !current_palindrom_has_different_letters && x == str[i-1]
-    # do nothing
-  elsif current_palindrom_start > 0 && x == str[current_palindrom_start-1]
-    current_palindrom_start -= 1
-    current_palindrom_has_different_letters = true
-  else
-    current_palindrom_start = i
-    current_palindrom_has_different_letters = false
+max_palindrom_start = max_palindrom_end = 0
+
+max_index = str.size-1
+i=0
+while i <= max_index
+  m_start = i
+  m_end = m_start
+  m_end += 1 while str[m_end+1] == str[m_start]
+  j = 0
+  j += 1 while j < m_start && m_end+j < max_index && str[m_start-j-1] == str[m_end+j+1]
+  if max_palindrom_end - max_palindrom_start < m_end+j-m_start+j
+    max_palindrom_start = m_start-j
+    max_palindrom_end = m_end+j
   end
-  if i - current_palindrom_start > max_palindrom_end - max_palindrom_start
-    max_palindrom_start = current_palindrom_start
-    max_palindrom_end = i
-  end
+  i = m_end+1
 end
 
 puts str[max_palindrom_start..max_palindrom_end]
