@@ -15,7 +15,7 @@ Problem.describe '1196' do |pr|
 
   n = 15000
   m = 1000000
-  input = [n] + (1..n).map{rand(1..10000)}.sort + [m] + (1..m).map{rand(20000..50000)}
+  input = [n] + (1..n).map{rand(1..499999999)*2}.sort + [m] + (1..m).map{rand(1..499999999)*2+1}
   pr.example input*"\n", '0'
 
   n = 15000
