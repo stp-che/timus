@@ -8,7 +8,7 @@ Problem.describe '1194' do |pr|
 
               '3'
 
-  pr.example ['2 1'], '0'
+  pr.example '2 1', '0'
 
   pr.example ['6 1',
               '1 3 2 2 3 1 4 3',
