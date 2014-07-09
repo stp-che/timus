@@ -18,8 +18,9 @@ solution = Solution.new $problem_id
 
 describe problem.id do
 
-  problem.examples.each do |input, expected_output, exactly|
-    specify do
+  problem.examples.each_with_index do |data, index|
+    input, expected_output, exactly = data
+    specify "example #{index+1}" do
       r = solution.execute(input)
       raise r.error if r.error && !r.error.empty?
       output = r.output
