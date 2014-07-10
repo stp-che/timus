@@ -18,6 +18,6 @@ Problem.describe '1510' do |pr|
   pr.example make_input(Array.new(n){1}), '1'
 
   n = 500000
-  pr.example make_input((1..n-1).to_a<<2), '2'
+  pr.example make_input((100000000..100000000+n-1).to_a<<100000001), '100000001'
 
 end
