@@ -7,7 +7,7 @@ EXAMPLES_PATH = File.expand_path File.join(File.dirname(__FILE__), 'examples')
 class Executing
   attr_reader :output, :error, :time
 
-  def initialize(command, input)
+  def initialize(command, input=nil)
     @command = command
     @input = input
     perform
@@ -46,16 +46,46 @@ class Executing
 end
 
 class Solution
+  class CompilationError < StandardError; end
+
+  BIN_PATH = File.expand_path '../bin', __FILE__
+
   def initialize(problem_id, type='rb')
     @problem_id = problem_id
     @type = type
   end
+
   def src_file
     @src_file ||= "#{LIB_PATH}/#{@problem_id}.#{@type}" 
   end
+
   def execute(input)
-    Executing.new("ruby #{src_file}", input)
+    compile unless compiled? if compilation_required?
+    case @type
+    when 'rb'
+      Executing.new("ruby #{src_file}", input)
+    when 'scala'
+      Executing.new("scala -cp #{BIN_PATH} Pr#{@problem_id}", input)
+    end
   end
+
+  def compile
+    c = case @type
+    when 'scala'
+      Executing.new("scalac #{src_file} -d #{BIN_PATH}")
+    end
+    raise CompilationError, c.error unless c.error.empty?
+    @compiled = true
+  end
+
+  def compilation_required?
+    @type == 'scala'
+  end
+
+  def compiled?
+    @compiled
+  end
+
 end
 
 class Problem

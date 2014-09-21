@@ -6,6 +6,7 @@ OptionParser.new do |o|
   o.on('-p PROBLEM_ID') { |b| $problem_id = b }
   o.on('-e EXAMPLE_NUM') { |b| $example = b.to_i }
   o.on('-n EXECUTING_TIMES'){|b| $executing_times = b.to_i }
+  o.on('-t TYPE', 'rb or scala') { |b| $type = b }
   o.on('-d', 'debug mode'){ $debug = true }
   o.on('-h') { puts o; exit }
   o.parse!
@@ -14,7 +15,8 @@ end
 require_relative 'base'
 
 problem = Problem._load $problem_id
-solution = Solution.new $problem_id
+$type ||= 'rb'
+solution = Solution.new $problem_id, $type
 
 problem.examples.each_with_index do |e, i|
   msg = " example #{i+1}: "
