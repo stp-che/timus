@@ -8,6 +8,8 @@ end
 
 Problem.describe '1510' do |pr|
 
+  pr.example "1\n0", '0'
+
   pr.example make_input(%w(2 1 1 1)), '1'
 
   pr.example make_input(%w(2 1 1)), '1'
@@ -18,6 +20,7 @@ Problem.describe '1510' do |pr|
   pr.example make_input(Array.new(n){1}), '1'
 
   n = 500000
-  pr.example make_input((100000000..100000000+n-1).to_a<<100000001), '100000001'
+  data = (100000000..100000000+n/2).to_a+Array.new(n/2){100000001}
+  pr.example make_input(data.shuffle), '100000001'
 
 end
