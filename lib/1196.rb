@@ -1,21 +1,13 @@
-DATA = $stdin.read.split("\n").map(&:to_i)
+require 'set'
 
-N = DATA[0]
+N = gets.to_i
 
-$count = 0
+useful_dates = Set.new
+N.times{ useful_dates << gets.to_i }
 
-def check(value, from=1, to=N)
-  return false if value > DATA[to] || value < DATA[from]
-  return true if value == DATA[from]
-  m = (from+to)/2
-  value > DATA[m] ? check(value, m+1, to) : check(value, from, m)
-end
+M = gets.to_i
+dates = $stdin.read.split("\n").map(&:to_i)
+count = 0
+dates.each{|date| count += 1 if useful_dates.include?(date) }
 
-M = DATA[N+1]
-i = N+2
-M.times{ 
-  $count += 1 if check(DATA[i])
-  i += 1
-}
-
-puts $count
+puts count
