@@ -31,7 +31,7 @@ describe problem.id do
       if expected_output.kind_of?(Proc)
         instance_exec output, &expected_output
       else
-        output.should == expected_output
+        expect(output).to eq expected_output
       end
     end
   end
