@@ -2,7 +2,7 @@ require 'optparse'
 
 OptionParser.new do |o|
   o.on('-p PROBLEM_ID') { |b| $problem_id = b }
-  o.on('-e EXAMPLE_NUM') { |b| $example = b.to_i }
+  o.on('-e EXAMPLE_NUM') { |b| $example = b.to_i-1 }
   o.on('-t TYPE', 'rb or scala') { |b| $type = b }
   o.on('-d', 'debug mode'){ $debug = true }
   o.on('-h') { puts o; exit }
@@ -20,7 +20,10 @@ solution = Solution.new $problem_id, $type
 
 describe problem.id do
 
-  problem.examples.each_with_index do |data, index|
+  examples = problem.examples
+  examples = examples[$example..$example] if $example
+
+  examples.each_with_index do |data, index|
     input, expected_output, exactly = data
     specify "example #{index+1}" do
       r = solution.execute(input)
